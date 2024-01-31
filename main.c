@@ -22,6 +22,7 @@ int	main(int ac, char **av)
 	{
 		program_init(av, &program, philos, forks);
 		create_threads(&program, forks);
+		destroy_all(NULL, &program, forks);
 	}
 	else
 	{

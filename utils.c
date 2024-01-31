@@ -45,7 +45,7 @@ int	gettime(void)
 
 	if (gettimeofday(&time, NULL) == -1)
 		printf("gettimeofday error\n");
-	return (time.tv_sec * 1000 + time.tv_sec / 1000);
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
 void	print_msg(char *msg, t_philos *philo, int id)
@@ -71,4 +71,13 @@ void	destroy_all(char *msg, t_program *program, pthread_mutex_t *forks)
 	pthread_mutex_destroy(&program->dead_lock);
 	while (++i < program->philos[0].num_of_philos)
 		pthread_mutex_destroy(&forks[i]);
+}
+
+void	ft_usleep(int time_to_sleep)
+{
+	int	start;
+
+	start = gettime();
+	while ((gettime() - start) < time_to_sleep)
+		usleep(500);
 }

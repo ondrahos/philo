@@ -64,5 +64,9 @@ void	print_msg(char *msg, t_philos *philo, int id);
 int		gettime(void);
 int		ft_atoi(const char *str);
 void	destroy_all(char *msg, t_program *program, pthread_mutex_t *forks);
+void	ft_usleep(int time_to_sleep);
+void	eating(t_philos *philo);
+void	sleeping(t_philos *philo);
+void	thinking(t_philos *philo);
 
 #endif

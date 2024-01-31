@@ -26,6 +26,14 @@ void	*philo_routine(void *pointer)
 	t_philos	*philo;
 
 	philo = (t_philos *)pointer;
+	if (philo->id % 2 == 0)
+		ft_usleep(1);
+	while (!dead_loop(philo))
+	{
+		eating(philo);
+		sleeping(philo);
+		thinking(philo);
+	}
 	return (NULL);
 }
 
