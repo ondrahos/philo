@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohosnedl <ohosnedl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/29 11:50:29 by ohosnedl          #+#    #+#             */
-/*   Updated: 2024/01/29 16:00:25 by ohosnedl         ###   ########.fr       */
+/*   Created: 2024/02/01 12:47:34 by ohosnedl          #+#    #+#             */
+/*   Updated: 2024/02/01 16:44:16 by ohosnedl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,53 +20,70 @@
 # include <stdbool.h>
 # include <sys/time.h>
 
-typedef struct s_philos
-{
-	int				id;
-	pthread_t		thread;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*right_fork;
-	pthread_mutex_t	*write_lock;
-	pthread_mutex_t	*meal_lock;
-	pthread_mutex_t	*dead_lock;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				last_meal_time;
-	int				start_time;
-	bool			*dead;
-	int				meals_num;
-	int				meals_eaten;
-	int				eating;
-	int				num_of_philos;
-}	t_philos;
+typedef pthread_mutex_t	mtx_t;
+typedef struct s_data	t_data;
 
-typedef struct s_program
+typedef struct s_philo
 {
-	bool			dead_flag;
-	pthread_mutex_t	write_lock;
-	pthread_mutex_t	meal_lock;
-	pthread_mutex_t	dead_lock;
-	t_philos		*philos;
-}	t_program;
+	int			id;
+	int			last_meal_time;
+	int			meals_eaten;
 
-int		dead_loop(t_philos *philo);
-void	*philo_routine(void *pointer);
-void	*monitor(void	*pointer);
-void	create_threads(t_program *program, pthread_mutex_t *forks);
-int		check_full(t_philos *philos);
-int		check_dead(t_philos *philos);
-int		philo_dead(t_philos *philo, int time_to_die);
-void	forks_init(pthread_mutex_t *forks, int num);
-void	philos_init(char **av, t_program *program,t_philos *philos, pthread_mutex_t *forks);
-void	program_init(char **av, t_program *program, t_philos *philos, pthread_mutex_t *forks);
-void	print_msg(char *msg, t_philos *philo, int id);
-int		gettime(void);
+	pthread_t	thread;
+	mtx_t		*left_fork;
+	mtx_t		*right_fork;
+	t_data		*data;
+
+	bool		*dead;
+	bool		*full;
+	bool		eating;
+}	t_philo;
+
+typedef struct s_data
+{
+	int	num_of_philos;
+	int	time_to_die;
+	int	time_to_eat;
+	int	time_to_sleep;
+	int	num_of_meals;
+	int	start_time;
+
+	mtx_t	write_lock;
+	mtx_t	data_lock;
+
+	bool	dead_flag;
+	bool	full_flag;
+
+	t_philo	*philo;
+}	t_data;
+
+typedef enum e_opcode
+{
+	LOCK,
+	UNLOCK,
+	INIT,
+	DESTROY,
+	CREATE,
+	JOIN,
+	DETACH,
+}	t_opcode;
+
+void	init_structs(char **av, t_data *data, t_philo *philo, mtx_t *forks);
 int		ft_atoi(const char *str);
-void	destroy_all(char *msg, t_program *program, pthread_mutex_t *forks);
+int		gettime(void);
+void	print_msg(char *msg, t_philo *philo);
+void	destroy_all(t_data *data, mtx_t *forks);
 void	ft_usleep(int time_to_sleep);
-void	eating(t_philos *philo);
-void	sleeping(t_philos *philo);
-void	thinking(t_philos *philo);
+void	create_threads(t_data *data);
+void	thinking(t_philo *philo);
+void	sleeping(t_philo *philo);
+void	eating(t_philo *philo);
+void	set_bool(mtx_t *mutex, bool *dest, bool value);
+bool	get_bool(mtx_t *mutex, bool *value);
+void	set_int(mtx_t *mutex, int *dest, int value);
+int		get_int(mtx_t *mutex, int *value);
+void	exit_error(char *msg);
+void	safe_thread(pthread_t *thread, void *(*function)(void *), void *data, t_opcode opcode);
+void	safe_mutex(mtx_t *mutex, t_opcode opcode);
 
 #endif

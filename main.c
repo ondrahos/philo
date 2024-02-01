@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohosnedl <ohosnedl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/29 12:01:29 by ohosnedl          #+#    #+#             */
-/*   Updated: 2024/01/29 15:55:43 by ohosnedl         ###   ########.fr       */
+/*   Created: 2024/02/01 12:48:07 by ohosnedl          #+#    #+#             */
+/*   Updated: 2024/02/01 16:41:50 by ohosnedl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 int	main(int ac, char **av)
 {
-	t_program		program;
-	t_philos		philos[200];
-	pthread_mutex_t	forks[200];
+	t_philo	philo[200];
+	t_data	data;
+	mtx_t	forks[200];
 
 	if (ac == 5 || ac == 6)
 	{
-		program_init(av, &program, philos, forks);
-		create_threads(&program, forks);
-		destroy_all(NULL, &program, forks);
+		init_structs(av, &data, philo, forks);
+		create_threads(&data);
+		destroy_all(&data, forks);
 	}
 	else
 	{

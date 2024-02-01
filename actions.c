@@ -3,46 +3,58 @@
 /*                                                        :::      ::::::::   */
 /*   actions.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohosnedl <ohosnedl@student.42prague.com    +#+  +:+       +#+        */
+/*   By: ohosnedl <ohosnedl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/31 15:36:14 by ohosnedl          #+#    #+#             */
-/*   Updated: 2024/01/31 15:59:35 by ohosnedl         ###   ########.fr       */
+/*   Created: 2024/02/01 16:18:43 by ohosnedl          #+#    #+#             */
+/*   Updated: 2024/02/01 16:37:58 by ohosnedl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	eating(t_philos *philo)
+void	eating(t_philo *philo)
 {
-	pthread_mutex_lock(philo->right_fork);
-	print_msg("has taken a fork", philo, philo->id);
-	if (philo->num_of_philos == 1)
+	if (philo->data->num_of_philos == 1)
+		return (ft_usleep(philo->data->time_to_eat));
+	if (philo->id % 2 == 0)
 	{
-		ft_usleep(philo->time_to_eat);
-		pthread_mutex_unlock(philo->right_fork);
-		return ;
+		safe_mutex(philo->right_fork, LOCK);
+		print_msg("has taken a fork", philo);
+		safe_mutex(philo->left_fork, LOCK);
+		print_msg("has taken a fork", philo);
+		set_bool(&philo->data->data_lock, &philo->eating, true);
+		print_msg("is eating", philo);
+		set_int(&philo->data->data_lock, &philo->last_meal_time, gettime());
+		set_int(&philo->data->data_lock, &philo->meals_eaten, philo->meals_eaten + 1);
+		ft_usleep(philo->data->time_to_eat);
+		set_bool(&philo->data->data_lock, &philo->eating, false);
+		safe_mutex(philo->right_fork, UNLOCK);
+		safe_mutex(philo->left_fork, UNLOCK);
 	}
-	pthread_mutex_lock(philo->left_fork);
-	print_msg("has taken a fork", philo, philo->id);
-	philo->eating = 1;
-	print_msg("is eating", philo, philo->id);
-	pthread_mutex_lock(philo->meal_lock);
-	philo->last_meal_time = gettime();
-	philo->meals_eaten++;
-	pthread_mutex_unlock(philo->meal_lock);
-	ft_usleep(philo->time_to_eat);
-	philo->eating = 0;
-	pthread_mutex_unlock(philo->left_fork);
-	pthread_mutex_unlock(philo->right_fork);
+	else
+	{
+		safe_mutex(philo->left_fork, LOCK);
+		print_msg("has taken a fork", philo);
+		safe_mutex(philo->right_fork, LOCK);
+		print_msg("has taken a fork", philo);
+		set_bool(&philo->data->data_lock, &philo->eating, true);
+		print_msg("is eating", philo);
+		set_int(&philo->data->data_lock, &philo->last_meal_time, gettime());
+		set_int(&philo->data->data_lock, &philo->meals_eaten, philo->meals_eaten + 1);
+		ft_usleep(philo->data->time_to_eat);
+		set_bool(&philo->data->data_lock, &philo->eating, false);
+		safe_mutex(philo->left_fork, UNLOCK);
+		safe_mutex(philo->right_fork, UNLOCK);
+	}
 }
 
-void	sleeping(t_philos *philo)
+void	sleeping(t_philo *philo)
 {
-	print_msg("is sleeping", philo, philo->id);
-	ft_usleep(philo->time_to_sleep);
+	print_msg("is sleeping", philo);
+	ft_usleep(philo->data->time_to_sleep);
 }
 
-void	thinking(t_philos *philo)
+void	thinking(t_philo *philo)
 {
-	print_msg("is thinking", philo, philo->id);
+	print_msg("is thinking", philo);
 }

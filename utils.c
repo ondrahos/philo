@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohosnedl <ohosnedl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/29 12:02:56 by ohosnedl          #+#    #+#             */
-/*   Updated: 2024/01/29 16:00:12 by ohosnedl         ###   ########.fr       */
+/*   Created: 2024/02/01 13:12:04 by ohosnedl          #+#    #+#             */
+/*   Updated: 2024/02/01 16:42:14 by ohosnedl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,29 +48,28 @@ int	gettime(void)
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
-void	print_msg(char *msg, t_philos *philo, int id)
+void	print_msg(char *msg, t_philo *philo)
 {
 	int	time;
 
-	pthread_mutex_lock(philo->write_lock);
-	time = gettime() - philo->start_time;
-	if (!dead_loop(philo))
-		printf("%i %i %s\n", time, id, msg);
-	pthread_mutex_unlock(philo->write_lock);
+	safe_mutex(&philo->data->write_lock, LOCK);
+	time = gettime() - philo->data->start_time;
+	if (get_bool(&philo->data->data_lock, philo->full) ||
+		get_bool(&philo->data->data_lock, philo->dead))
+			return ;
+	printf("%i %i %s\n", time, philo->id, msg);
+	safe_mutex(&philo->data->write_lock, UNLOCK);
 }
 
-void	destroy_all(char *msg, t_program *program, pthread_mutex_t *forks)
+void	destroy_all(t_data *data, mtx_t *forks)
 {
 	int	i;
 
 	i = -1;
-	if (msg)
-		printf("%s\n", msg);
-	pthread_mutex_destroy(&program->write_lock);
-	pthread_mutex_destroy(&program->meal_lock);
-	pthread_mutex_destroy(&program->dead_lock);
-	while (++i < program->philos[0].num_of_philos)
-		pthread_mutex_destroy(&forks[i]);
+	safe_mutex(&data->write_lock, DESTROY);
+	safe_mutex(&data->data_lock, DESTROY);
+	while (++i < data->num_of_philos)
+		safe_mutex(&forks[i], DESTROY);
 }
 
 void	ft_usleep(int time_to_sleep)
