@@ -12,13 +12,24 @@
 
 #include "philo.h"
 
+static bool	end_feast(t_philo *philo)
+{
+	if (get_bool(&philo->data->data_lock, philo->dead) == true
+		|| get_bool(&philo->data->data_lock, philo->full) == true)
+		return (true);
+	else
+		return (false);
+}
+
 static void	*philo_routine(void *pointer)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *)pointer;
-	while (!get_bool(&philo->data->data_lock, philo->dead))
+	while (!end_feast(philo))
 	{
+		if (philo->data->num_of_philos == 1)
+			return (one_philo(philo), NULL);
 		eating(philo);
 		sleeping(philo);
 		thinking(philo);
@@ -31,6 +42,12 @@ static void	*monitor(void *pointer)
 	t_philo	*philo;
 
 	philo = (t_philo *)pointer;
+	while (1)
+	{
+		if (check_dead(philo) == true || check_full(philo) == true)
+			break ;
+	}
+	return (NULL);
 }
 
 void	create_threads(t_data *data)

@@ -85,5 +85,9 @@ int		get_int(mtx_t *mutex, int *value);
 void	exit_error(char *msg);
 void	safe_thread(pthread_t *thread, void *(*function)(void *), void *data, t_opcode opcode);
 void	safe_mutex(mtx_t *mutex, t_opcode opcode);
+bool	check_dead(t_philo *philo);
+bool	check_full(t_philo *philo);
+void	one_philo(t_philo *philo);
+
 
 #endif

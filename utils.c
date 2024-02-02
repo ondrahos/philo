@@ -56,7 +56,7 @@ void	print_msg(char *msg, t_philo *philo)
 	time = gettime() - philo->data->start_time;
 	if (get_bool(&philo->data->data_lock, philo->full) ||
 		get_bool(&philo->data->data_lock, philo->dead))
-			return ;
+			return (safe_mutex(&philo->data->write_lock, UNLOCK));
 	printf("%i %i %s\n", time, philo->id, msg);
 	safe_mutex(&philo->data->write_lock, UNLOCK);
 }

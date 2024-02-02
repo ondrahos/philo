@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 NAME	:= philo
-CFLAGS	:= -Wextra -Wall -Werror -g
+CFLAGS	:= -Wextra -Wall -Werror -g -pthread
 SRCS	:= $(wildcard *.c)
 OBJS	:= ${SRCS:.c=.o}
 

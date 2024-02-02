@@ -20,7 +20,7 @@ static void	init_philo(t_philo *philo, t_data *data, mtx_t *forks)
 	while (++i < data->num_of_philos)
 	{
 		philo[i].id = i + 1;
-		philo[i].last_meal_time = 0;
+		philo[i].last_meal_time = gettime();
 		philo[i].meals_eaten = 0;
 		philo[i].left_fork = &forks[i];
 		if (i == 0)
