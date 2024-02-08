@@ -6,13 +6,13 @@
 /*   By: ohosnedl <ohosnedl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 13:10:46 by ohosnedl          #+#    #+#             */
-/*   Updated: 2024/02/01 16:40:08 by ohosnedl         ###   ########.fr       */
+/*   Updated: 2024/02/05 13:07:16 by ohosnedl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	init_philo(t_philo *philo, t_data *data, mtx_t *forks)
+static void	init_philo(t_philo *philo, t_data *data, t_mtx *forks)
 {
 	int	i;
 
@@ -52,7 +52,7 @@ static void	init_data(t_data *data, t_philo *philo, char **av)
 	data->philo = philo;
 }
 
-static void	init_forks(mtx_t *forks, int num_of_forks)
+static void	init_forks(t_mtx *forks, int num_of_forks)
 {
 	int	i;
 
@@ -61,7 +61,7 @@ static void	init_forks(mtx_t *forks, int num_of_forks)
 		safe_mutex(&forks[i], INIT);
 }
 
-void	init_structs(char **av, t_data *data, t_philo *philo, mtx_t *forks)
+void	init_structs(char **av, t_data *data, t_philo *philo, t_mtx *forks)
 {
 	init_forks(forks, ft_atoi(av[1]));
 	init_data(data, philo, av);

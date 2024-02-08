@@ -6,7 +6,7 @@
 /*   By: ohosnedl <ohosnedl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 15:58:03 by ohosnedl          #+#    #+#             */
-/*   Updated: 2024/02/01 16:44:06 by ohosnedl         ###   ########.fr       */
+/*   Updated: 2024/02/05 13:01:33 by ohosnedl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ bool	check_dead(t_philo *philo)
 	{
 		if (philo_dead(&philo[i]) == true)
 		{
-			print_msg("died \U0001F480", &philo[i]);
+			print_msg("died", &philo[i]);
 			set_bool(&philo->data->data_lock, philo[i].dead, true);
 			return (true);
 		}
@@ -53,7 +53,7 @@ bool	check_full(t_philo *philo)
 	while (++i < philo->data->num_of_philos)
 	{
 		if (philo[i].data->num_of_meals <= get_int(&philo[i].data->data_lock,
-			&philo[i].meals_eaten))
+				&philo[i].meals_eaten))
 			full++;
 	}
 	if (full == philo[0].data->num_of_philos)
@@ -62,4 +62,24 @@ bool	check_full(t_philo *philo)
 		return (true);
 	}
 	return (false);
+}
+
+void	check_args(char **av, int ac)
+{
+	int	i;
+
+	i = 0;
+	while (++i < ac)
+	{
+		if (!ft_atoi(av[i]))
+		{
+			printf("Arguments have to be numbers\n");
+			exit(EXIT_FAILURE);
+		}
+		if (ft_atoi(av[i]) <= 0)
+		{
+			printf("Arguments cannot be less than or equal to zero\n");
+			exit(EXIT_FAILURE);
+		}
+	}
 }

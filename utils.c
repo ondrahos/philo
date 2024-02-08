@@ -6,7 +6,7 @@
 /*   By: ohosnedl <ohosnedl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 13:12:04 by ohosnedl          #+#    #+#             */
-/*   Updated: 2024/02/01 16:42:14 by ohosnedl         ###   ########.fr       */
+/*   Updated: 2024/02/05 13:09:17 by ohosnedl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,14 @@ void	print_msg(char *msg, t_philo *philo)
 
 	safe_mutex(&philo->data->write_lock, LOCK);
 	time = gettime() - philo->data->start_time;
-	if (get_bool(&philo->data->data_lock, philo->full) ||
-		get_bool(&philo->data->data_lock, philo->dead))
-			return (safe_mutex(&philo->data->write_lock, UNLOCK));
+	if (get_bool(&philo->data->data_lock, philo->full)
+		|| get_bool(&philo->data->data_lock, philo->dead))
+		return (safe_mutex(&philo->data->write_lock, UNLOCK));
 	printf("%i %i %s\n", time, philo->id, msg);
 	safe_mutex(&philo->data->write_lock, UNLOCK);
 }
 
-void	destroy_all(t_data *data, mtx_t *forks)
+void	destroy_all(t_data *data, t_mtx *forks)
 {
 	int	i;
 

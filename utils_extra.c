@@ -6,7 +6,7 @@
 /*   By: ohosnedl <ohosnedl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 13:26:58 by ohosnedl          #+#    #+#             */
-/*   Updated: 2024/02/01 16:42:39 by ohosnedl         ###   ########.fr       */
+/*   Updated: 2024/02/05 13:09:29 by ohosnedl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ static void	thread_error_check(int num)
 		exit_error("Thread error has occured\n");
 }
 
-void	safe_thread(pthread_t *thread, void *(*function)(void *), void *data, t_opcode opcode)
+void	safe_thread(pthread_t *thread, void *(*function)(void *),
+						void *data, t_opcode opcode)
 {
 	if (opcode == CREATE)
 		thread_error_check(pthread_create(thread, NULL, function, data));
@@ -46,7 +47,7 @@ static void	mutex_error_check(int num)
 		exit_error("Mutex error has occured\n");
 }
 
-void	safe_mutex(mtx_t *mutex, t_opcode opcode)
+void	safe_mutex(t_mtx *mutex, t_opcode opcode)
 {
 	if (opcode == INIT)
 		mutex_error_check(pthread_mutex_init(mutex, NULL));

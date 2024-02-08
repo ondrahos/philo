@@ -6,7 +6,7 @@
 /*   By: ohosnedl <ohosnedl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 15:15:56 by ohosnedl          #+#    #+#             */
-/*   Updated: 2024/02/01 16:48:48 by ohosnedl         ###   ########.fr       */
+/*   Updated: 2024/02/05 13:04:27 by ohosnedl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ void	create_threads(t_data *data)
 	i = -1;
 	safe_thread(&checker, &monitor, data->philo, CREATE);
 	while (++i < data->num_of_philos)
-		safe_thread(&data->philo[i].thread, &philo_routine, &data->philo[i], CREATE);
+		safe_thread(&data->philo[i].thread, &philo_routine,
+			&data->philo[i], CREATE);
 	i = -1;
 	safe_thread(&checker, NULL, NULL, JOIN);
 	while (++i < data->num_of_philos)
