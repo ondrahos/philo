@@ -32,4 +32,4 @@ The Philosophers project is a crucial part of the curriculum at 42 School, desig
 
 ### Conclusion
 
-The Philosophers project offers students at 42 School an opportunity to delve into the fascinating world of concurrent programming and synchronization problems. By successfully implementing a solution to the dining philosophers problem, students gain invaluable experience that prepares them for tackling real-world challenges in software development.
+The Philosophers project offers students an opportunity to delve into the fascinating world of concurrent programming and synchronization problems. By successfully implementing a solution to the dining philosophers problem, students gain invaluable experience that prepares them for tackling real-world challenges in software development.
