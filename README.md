@@ -24,6 +24,14 @@ The Philosophers project is a crucial part of the curriculum at 42 School, desig
 4. **Synchronization:**
    - Use of synchronization primitives such as mutexes or semaphores to control access to shared resources and prevent race conditions.
 
+### Input Format
+
+The program should accept command-line arguments specifying the number of philosophers and the time each philosopher spends thinking and eating. For example:
+- `<number_of_philosophers>`: The total number of philosophers at the table.
+- `<time_to_die>`: Time in milliseconds after which a philosopher dies if they have not started eating.
+- `<time_to_eat>`: Time in milliseconds that a philosopher takes to finish eating.
+- `<time_to_sleep>`: Time in milliseconds that a philosopher spends sleeping before starting the next cycle.
+
 ### Benefits
 
 - Develops a deep understanding of synchronization problems and concurrent programming concepts.
